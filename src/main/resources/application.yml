@@ -4,23 +4,34 @@ server:
 spring:
   application:
     name: brewery-gateway-service
-
   cloud:
     gateway:
       routes:
         - id: beer-service
-          uri: http://localhost:8081
+          uri: lb://BEER-SERVICE
           predicates:
-            - Path=/api/v1/beers
-            - Path=/api/v1/beers/*
+            - Path=/api/v1/beers/**
         - id: beer-order-service
-          uri: http://localhost:8083
+          uri: lb://beer-order-service
           predicates:
-            - Path=/api/v1/orders/
-            - Path=/api/v1/orders/*
+            - Path=/api/v1/orders/**
         - id: beer-inventory-service
-          uri: http://localhost:8082
+          uri: lb://beer-inventory-service
           predicates:
-            - Path=/api/v1/inventory
-            - Path=/api/v1/inventory/*
+            - Path=/api/v1/inventory/**
+        - id: INVENTORY-FAILOVER
+          uri: lb://INVENTORY-FAILOVER
+          predicates:
+            - Path=/api/v1/inventory-failover
+      discovery:
+        locator:
+          enabled: true
 
+  zipkin:
+    base-url: http://localhost:9411
+logging:
+  level:
+    org.springframework: debug
+eureka:
+  client:
+    register-with-eureka: false
