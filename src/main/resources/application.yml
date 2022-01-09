@@ -34,4 +34,7 @@ logging:
     org.springframework: debug
 eureka:
   client:
-    register-with-eureka: false
+    register-with-eureka: true
+
+    service-url:
+      defaultZone: http://eurekaUser:eurekaPassword@localhost:8761/eureka
